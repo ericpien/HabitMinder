@@ -19,23 +19,48 @@ import Overview from "./Overview";
 
 function Login() {
   //Set up the state variables for email and password
+  const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
   // Create a useEffect hook that listens for changes in the authentication state
-  // useEffect(() => {
-  //   ...
-  // }, []);
+  // if logged in go to home
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {           
+        navigation.navigate("Home");
+      }
+    });
+  }, []);
 
   // Create functions for handling sign-up and login
-  // const handleSignUp = () => {
-  //   ...
-  // };
+  const handleSignUp = () => {
+    // const auth = getAuth();
+    
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setUserLogHandler(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
 
-  // const handleLogin = () => {
-  //   ...
-  // };
+  const handleLogin = () => {
+  //  const auth = getAuth();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -64,12 +89,12 @@ function Login() {
 
       <View style={styles.buttonContainer}>
 
-        <TouchableOpacity onPress={Overview} style={styles.button}>
-          <Text style={styles.buttonText}>Press me to start</Text>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+          <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
         <TouchableOpacity
           //Need to login users when
-          onPress={Overview}
+          onPress={handleSignUp}
           style={[styles.button, styles.buttonOutline]}
         >
           <Text style={styles.buttonOutlineText}>Sign Up</Text>

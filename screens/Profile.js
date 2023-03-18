@@ -8,9 +8,14 @@ import Login from "./Login";
 function Profile({ navigation }) {
   const [isEnabled, setIsEnabled] = useState(false);
   //need to develope the sign out function for the button to work
-  // const handleSignOut = () => {
-  //   ...
-  // }
+  const handleSignOut = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigation.navigate("Login")      
+    }).catch((error) => {
+      
+    });
+  }
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
     <View className="flex-1 items-center px-8 bg-black">
@@ -43,6 +48,7 @@ function Profile({ navigation }) {
         className="mt-48"
         //on press the button should sign the user out
         title="Log Out"
+        onPress = {handleSignOut}
         buttonStyle={{
           borderColor: "#d04344",
           backgroundColor: "#d04344",
